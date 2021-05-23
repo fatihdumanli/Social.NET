@@ -255,7 +255,7 @@ namespace SocialMediaSharing.BLL.LinkedInAPI
         /// <param name="token"></param>
         /// <param name="createUgcPostRequest"></param>
         /// <returns></returns>
-        public LinkedInAPIResult<bool> CreateOrganicUGCPost(OAuthv2AccessToken token, RequestCreateUGCPost createUgcPostRequest)
+        public LinkedInAPIResult<CreateUGCPostResponse> CreateOrganicUGCPost(OAuthv2AccessToken token, RequestCreateUGCPost createUgcPostRequest)
         {
             var _linkedInRestClient = new RestClient("https://api.linkedin.com/v2/ugcPosts")
             {
@@ -270,14 +270,16 @@ namespace SocialMediaSharing.BLL.LinkedInAPI
                 var response = _linkedInRestClient.Execute(request);
                 if (!response.IsSuccessful)
                 {
-                    return LinkedInAPIResult<bool>.Fail(response.Content);
+                    return LinkedInAPIResult<CreateUGCPostResponse>.Fail(response.Content);
                 }
+                
+                var requestCreateUGCPostResponse = JsonConvert.DeserializeObject<CreateUGCPostResponse>(response.Content);
 
-                return LinkedInAPIResult<bool>.Success(true);
+                return LinkedInAPIResult<CreateUGCPostResponse>.Success(requestCreateUGCPostResponse);
             }
             catch (Exception ex)
             {
-                return LinkedInAPIResult<bool>.Fail(ex.Message);
+                return LinkedInAPIResult<CreateUGCPostResponse>.Fail(ex.Message);
             }
         }
 

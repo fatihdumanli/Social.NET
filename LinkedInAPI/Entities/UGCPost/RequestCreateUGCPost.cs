@@ -34,7 +34,7 @@ namespace SocialMediaSharing.BLL.LinkedInAPI.Entities.UGCPost
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this,new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
         }
 
         public RequestCreateUGCPost()

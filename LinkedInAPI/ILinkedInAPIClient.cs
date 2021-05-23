@@ -60,7 +60,7 @@ namespace SocialMediaSharing.BLL.LinkedInAPI
         LinkedInAPIResult<LinkedInUploadStatusResponse> CheckUploadStatus(OAuthv2AccessToken token, string asset);
         #endregion
         #region UGC Post
-        LinkedInAPIResult<bool> CreateOrganicUGCPost(OAuthv2AccessToken token, RequestCreateUGCPost request);
+        LinkedInAPIResult<CreateUGCPostResponse> CreateOrganicUGCPost(OAuthv2AccessToken token, RequestCreateUGCPost request);
         #endregion
     }
 }
