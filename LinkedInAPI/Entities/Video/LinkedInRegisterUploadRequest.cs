@@ -13,15 +13,36 @@ namespace SocialMediaSharing.BLL.LinkedInAPI.Entities
     {
 
         /// <summary>
-        /// Owner in format: urn:li:person:{test_user_id}
+        /// Uses an ID to create URN for the owner based on accountType.
+        /// Owner in format: urn:li:person:{linkedInUserId}
+        /// Owner in format: urn:li:organization:{linkedInUserId}
         /// </summary>
-        /// <param name="owner"></param>
-        /// <param name=""></param>
+        /// <param name="linkedInUserId"></param>
+        /// <param name="accountType"></param>
         /// <returns></returns>
         public static LinkedInRegisterUploadRequest Create(string linkedInUserId, LinkedInAccountType accountType)
         {
             LinkedInRegisterUploadRequest request = new LinkedInRegisterUploadRequest();
             request.RegisterUploadRequest.Owner = linkedInUserId.ToOwnerInfo(accountType);
+            request.RegisterUploadRequest.Recipes.Add("urn:li:digitalmediaRecipe:feedshare-video");
+            request.RegisterUploadRequest.ServiceRelationships.Add(new ServiceRelationship()
+            {
+                Identifier = "urn:li:userGeneratedContent",
+                RelationshipType = "OWNER"
+            });
+
+            return request;
+        }
+
+        /// <summary>
+        /// Uses URN of the member or organization to create an Upload request
+        /// </summary>
+        /// <param name="ownerURN"></param>
+        /// <returns></returns>
+        public static LinkedInRegisterUploadRequest Create(string ownerURN)
+        {
+            LinkedInRegisterUploadRequest request = new LinkedInRegisterUploadRequest();
+            request.RegisterUploadRequest.Owner = ownerURN;
             request.RegisterUploadRequest.Recipes.Add("urn:li:digitalmediaRecipe:feedshare-video");
             request.RegisterUploadRequest.ServiceRelationships.Add(new ServiceRelationship()
             {
