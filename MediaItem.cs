@@ -8,7 +8,7 @@ namespace SocialMediaSharing.BLL
 {
     public enum MediaType
     {
-        Image, Video
+        Image, Video, Link, Text
     }
 
     /// <summary>
