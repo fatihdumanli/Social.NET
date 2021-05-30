@@ -191,7 +191,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
       }
 
       /// <summary>
-      /// Publishes a post on Facebook page (text and image)
+      /// Publishes a photo post on Facebook page (text and image)
       /// </summary>
       /// <param name="page"></param>
       /// <param name="content"></param>
@@ -199,9 +199,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
       /// <returns></returns>
       public FacebookGraphResult<FacebookPost> PublishPost(FacebookPageInformation page, string content, FacebookPhoto photo)
       {
-         var _fbRestClient = new RestClient($"https://graph.facebook.com/{page.Id}/photos?url={photo.PhotoURL}&published={photo.IsPublished}&message={content}&access_token={page.AccessToken}")
-         {
-         };
+         var _fbRestClient = new RestClient($"https://graph.facebook.com/{page.Id}/photos?url={photo.PhotoURL}&published={photo.IsPublished}&message={content}&access_token={page.AccessToken}");
 
          var request = new RestRequest(Method.POST);
 
@@ -224,8 +222,79 @@ namespace SocialMediaSharing.BLL.FacebookGraph
 
       }
 
+      public FacebookGraphResult<FacebookPost> PublishPost(FacebookPageInformation page, string content, List<FacebookPhoto> photos)
+      {
+
+         if (photos.Count == 1)
+         {
+            return PublishPost(page, content, photos[0]);
+         }
+         else
+         {
+
+            List<string> publishedPhotoIds = new List<string>();
+            string last_error = "";
+
+            foreach (var photo in photos)
+            {
+               var _fbRestClient = new RestClient($"https://graph.facebook.com/{page.Id}/photos?published=false&url={photo.PhotoURL}&access_token={page.AccessToken}");
+               var request = new RestRequest(Method.POST);
+
+               try
+               {
+                  var response = _fbRestClient.Execute(request);
+                  if (!response.IsSuccessful)
+                  {
+                     return FacebookGraphResult<FacebookPost>.Fail(response.Content);
+                  }
+
+                  var result = JsonConvert.DeserializeObject<FacebookPhoto>(response.Content);
+
+                  publishedPhotoIds.Add(result.Id);
+               }
+               catch (Exception ex)
+               {
+                  last_error = ex.Message;
+                  // return FacebookGraphResult<FacebookPost>.Fail(ex.Message);
+                  // bypassing this image
+               }
+            }
+
+            if (publishedPhotoIds.Count > 0)
+            {
+               var _fbRestClient = new RestClient($"https://graph.facebook.com/{page.Id}/feed?message={content}&access_token={page.AccessToken}");
+
+               var request = new RestRequest(Method.POST);
+
+               for (int i = 0; i < publishedPhotoIds.Count; i++)
+               {
+                  request.AddParameter($"attached_media[{i}]", "{\"media_fbid\":\"" + publishedPhotoIds[i].ToString() + "\"}");
+               }
+
+               try
+               {
+                  var response = _fbRestClient.Execute(request);
+                  if (!response.IsSuccessful)
+                  {
+                     return FacebookGraphResult<FacebookPost>.Fail(response.Content);
+                  }
+
+                  return FacebookGraphResult<FacebookPost>.Success(JsonConvert.DeserializeObject<FacebookPost>(response.Content));
+               }
+               catch (Exception ex)
+               {
+                  return FacebookGraphResult<FacebookPost>.Fail(ex.Message);
+               }
+            }
+            else
+            {
+               return FacebookGraphResult<FacebookPost>.Fail($"All photos failed to upload, {last_error}");
+            }
+         }
+      }
+
       /// <summary>
-      /// Publishes a post on Facebook page (text and link)
+      /// Publishes a link post on Facebook page/group
       /// </summary>
       /// <param name="page"></param>
       /// <param name="content"></param>
@@ -258,7 +327,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
       }
 
       /// <summary>
-      /// Publishes a post on Facebook page (VIDEO AND CAPTION)
+      /// Publishes a video post on a Facebook page/group
       /// </summary>
       /// <param name="account"></param>
       /// <param name="content"></param>
