@@ -10,7 +10,7 @@ namespace SocialMediaSharing.BLL
     {
         Image, Video, Link, Text
     }
-
+    
     /// <summary>
     /// Represents a media item that will be published on social media platforms
     /// </summary>

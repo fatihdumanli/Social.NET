@@ -358,7 +358,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
       #endregion
 
 
-      #region Publish Scheduled Posts
+      #region Publish Scheduled Facebook Posts
       /// <summary>
       /// ONLY TEXT CONTENT
       /// Schedules a post.
@@ -513,7 +513,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
 
       #endregion
 
-      #region Video
+      #region Facebook Video
       /// <summary>
       /// Starts a upload session on facebook video graph.
       /// https://developers.facebook.com/docs/video-api/guides/publishing      
@@ -612,6 +612,81 @@ namespace SocialMediaSharing.BLL.FacebookGraph
             return FacebookGraphResult<FacebookVideo>.Fail(ex.Message);
          }
 
+      }
+      #endregion
+
+      #region Instagram Posts
+      /// <summary>
+      /// ONLY TEXT CONTENT
+      /// Schedules a post.
+      /// https://developers.facebook.com/docs/pages/publishing/
+      /// </summary>
+      /// <param name="page"></param>
+      /// <param name="mediaType"></param>
+      /// <param name="assetURL"></param>
+      /// <param name="caption"></param>
+      /// <returns></returns>
+      public FacebookGraphResult<InstagramPost> PublishInstagramPost(FacebookPageInformation page, InstagramContainerType mediaType, string assetURL, string caption)
+      {
+         string last_error = "";
+         string containerRequestURL = "";
+
+         if (mediaType == InstagramContainerType.PHOTO)
+         {
+            containerRequestURL = $"https://graph.facebook.com/{page.Id}/media?image_url={assetURL}&caption={caption}&access_token={page.AccessToken}";
+         }
+         else if (mediaType == InstagramContainerType.VIDEO)
+         {
+            containerRequestURL = $"https://graph.facebook.com/{page.Id}/media?media_type=VIDEO&video_url={assetURL}&caption={caption}&access_token={page.AccessToken}";
+         }
+
+         var _fbRestClient = new RestClient(containerRequestURL);
+         var request = new RestRequest(Method.POST);
+
+         try
+         {
+            var response = _fbRestClient.Execute(request);
+            if (!response.IsSuccessful)
+            {
+               return FacebookGraphResult<InstagramPost>.Fail(response.Content);
+            }
+
+            var result = JsonConvert.DeserializeObject<InstagramContainer>(response.Content);
+
+            var creationId = result.Id;
+
+
+            if (creationId.Length > 0)
+            {
+               _fbRestClient = new RestClient($"https://graph.facebook.com/{page.Id}/media_publish?creation_id={creationId}&access_token={page.AccessToken}");
+
+               request = new RestRequest(Method.POST);
+
+               try
+               {
+                  response = _fbRestClient.Execute(request);
+                  if (!response.IsSuccessful)
+                  {
+                     return FacebookGraphResult<InstagramPost>.Fail(response.Content);
+                  }
+
+                  return FacebookGraphResult<InstagramPost>.Success(JsonConvert.DeserializeObject<InstagramPost>(response.Content));
+               }
+               catch (Exception ex)
+               {
+                  return FacebookGraphResult<InstagramPost>.Fail(ex.Message);
+               }
+            }
+            else
+            {
+               return FacebookGraphResult<InstagramPost>.Fail($"Photo upload is failed, {last_error}");
+            }
+
+         }
+         catch (Exception ex)
+         {
+            return FacebookGraphResult<InstagramPost>.Fail(ex.Message);
+         }
       }
       #endregion
    }

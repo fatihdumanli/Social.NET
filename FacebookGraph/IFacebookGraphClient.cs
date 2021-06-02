@@ -61,7 +61,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
       /// <param name="content"></param>
       /// <param name="photo"></param>
       /// <returns></returns>
-       FacebookGraphResult<FacebookPost> PublishPost(FacebookPageInformation page, string content, FacebookPhoto photo);
+      FacebookGraphResult<FacebookPost> PublishPost(FacebookPageInformation page, string content, FacebookPhoto photo);
 
       /// <summary>
       /// Publishes a post on Facebook page (text and link)
@@ -70,7 +70,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
       /// <param name="content"></param>
       /// <param name="link"></param>
       /// <returns></returns>
-       FacebookGraphResult<FacebookPost> PublishPost(FacebookPageInformation page, string content, string link);
+      FacebookGraphResult<FacebookPost> PublishPost(FacebookPageInformation page, string content, string link);
 
       /// <summary>
       /// Publishes a post on Facebook page (VIDEO AND CAPTION)
@@ -79,7 +79,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
       /// <param name="content"></param>
       /// <param name="video"></param>
       /// <returns></returns>
-        FacebookGraphResult<FacebookPost> PublishPost(FacebookPageInformation page, string content, FacebookVideo video);
+      FacebookGraphResult<FacebookPost> PublishPost(FacebookPageInformation page, string content, FacebookVideo video);
       #endregion
 
       #region Publish Scheduled Posts
@@ -129,5 +129,20 @@ namespace SocialMediaSharing.BLL.FacebookGraph
       /// <returns></returns>
       FacebookGraphResult<FacebookPost> SchedulePost(FacebookPageInformation page, string content, FacebookVideo video, long unixTimeStamp);
       #endregion
+
+      #region Instagram Posts
+      /// <summary>
+      /// ONLY TEXT CONTENT
+      /// Schedules a post.
+      /// https://developers.facebook.com/docs/pages/publishing/
+      /// </summary>
+      /// <param name="page"></param>
+      /// <param name="mediaType"></param>
+      /// <param name="assetURL"></param>
+      /// <param name="caption"></param>
+      /// <returns></returns>
+      FacebookGraphResult<InstagramPost> PublishInstagramPost(FacebookPageInformation page, InstagramContainerType mediaType, string assetURL, string caption);
+      #endregion
+
    }
 }
