@@ -132,9 +132,8 @@ namespace SocialMediaSharing.BLL.FacebookGraph
 
       #region Instagram Posts
       /// <summary>
-      /// ONLY TEXT CONTENT
-      /// Schedules a post.
-      /// https://developers.facebook.com/docs/pages/publishing/
+      /// Supports 1 image or 1 video. Certain rules apply.
+      /// https://developers.facebook.com/docs/instagram-api/reference/ig-user/media#creating
       /// </summary>
       /// <param name="page"></param>
       /// <param name="mediaType"></param>
