@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace SocialMediaSharing.BLL.FacebookGraph.Entities
 {
-    public class FacebookUploadVideoResponse
+    public class InstagramPost
     {
         [JsonProperty("id")]
-        public string VideoId { get; set; }
+        public string Id { get; set; }
     }
 }

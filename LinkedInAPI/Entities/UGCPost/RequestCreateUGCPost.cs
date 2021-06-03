@@ -34,7 +34,7 @@ namespace SocialMediaSharing.BLL.LinkedInAPI.Entities.UGCPost
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this,new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
         }
 
         public RequestCreateUGCPost()
@@ -74,6 +74,20 @@ namespace SocialMediaSharing.BLL.LinkedInAPI.Entities.UGCPost
         public string Text { get; set; }
     }
 
+    public class Description
+    {
+        public Description()
+        {
+            Attributes = new List<object>();
+        }
+
+        [JsonProperty("attributes")]
+        public List<object> Attributes { get; set; }
+
+        [JsonProperty("text")]
+        public string Text { get; set; }
+    }
+    
     public class Medium
     {
         public Medium()
@@ -89,6 +103,13 @@ namespace SocialMediaSharing.BLL.LinkedInAPI.Entities.UGCPost
 
         [JsonProperty("title")]
         public Title Title { get; set; }
+
+        [JsonProperty("description")]
+        public Description Description { get; set; }
+
+        [JsonProperty("originalUrl")]
+        public string OriginalUrl { get; set; }
+        
     }
 
     public class ShareCommentary
