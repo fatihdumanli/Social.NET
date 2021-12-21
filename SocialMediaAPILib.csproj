@@ -9,14 +9,14 @@
 	  <Title>SocialMediaSharing.BLL</Title>
     <AssemblyName>SocialMediaSharingLib</AssemblyName>    
     <RootNamespace>SocialMediaAPILib</RootNamespace>
-    <Authors>Fatih Dumanli</Authors>
+    <Authors>Fatih Dumanli, Atakan Eser</Authors>
     <Description>A .NET Framework library for automated posting to platforms Facebook, Twitter and LinkedIn. Supports posts with media objects.</Description>
     <PackageProjectUrl>https://github.com/circleboom/Social.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/circleboom/Social.NET</RepositoryUrl>
-    <Version>1.0.13</Version>
-    <AssemblyVersion>1.0.13.0</AssemblyVersion>
-    <FileVersion>1.0.13.0</FileVersion>
-    <PackageReleaseNotes>IG photo and video publish</PackageReleaseNotes>
+    <Version>1.0.14</Version>
+    <AssemblyVersion>1.0.14.0</AssemblyVersion>
+    <FileVersion>1.0.14.0</FileVersion>
+    <PackageReleaseNotes>Support for resolving Facebook and IG post URLs</PackageReleaseNotes>
     <PackageTags>social sharing, twitter, facebook, linkedin, oauth</PackageTags>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -24,9 +24,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="License" Pack="true" Visible="false" PackagePath=""/>
+    <None Include="LICENSE" Pack="true" PackagePath=""/>
   </ItemGroup>
 </Project>

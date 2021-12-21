@@ -11,5 +11,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph.Entities
     {
         [JsonProperty("id")]
         public string Id { get; set; }
+        [JsonProperty("permalink")]
+        public string Permalink { get; set; }
     }
 }

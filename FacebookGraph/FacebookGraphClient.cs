@@ -613,6 +613,31 @@ namespace SocialMediaSharing.BLL.FacebookGraph
          }
 
       }
+
+      /// <summary>
+      /// Returns FB permalinks
+      /// </summary>
+      public FacebookGraphResult<FacebookPost> GetPostPermalink(FacebookPageInformation page, string post_id)
+      {
+         var _fbRestClient = new RestClient($"https://graph.facebook.com/{post_id}?fields=permalink_url&access_token={page.AccessToken}");
+
+         var request = new RestRequest(Method.GET);
+
+         try
+         {
+            var response = _fbRestClient.Execute(request);
+            if (!response.IsSuccessful)
+            {
+               return FacebookGraphResult<FacebookPost>.Fail(response.Content);
+            }
+
+            return FacebookGraphResult<FacebookPost>.Success(JsonConvert.DeserializeObject<FacebookPost>(response.Content));
+         }
+         catch (Exception ex)
+         {
+            return FacebookGraphResult<FacebookPost>.Fail(ex.Message);
+         }
+      }
       #endregion
 
       #region Instagram Posts
@@ -681,6 +706,32 @@ namespace SocialMediaSharing.BLL.FacebookGraph
                return FacebookGraphResult<InstagramPost>.Fail($"Photo upload is failed, {last_error}");
             }
 
+         }
+         catch (Exception ex)
+         {
+            return FacebookGraphResult<InstagramPost>.Fail(ex.Message);
+         }
+      }
+
+      
+      /// <summary>
+      /// Returns IG permalink
+      /// </summary>
+      public FacebookGraphResult<InstagramPost> GetInstagramPostPermalink(FacebookPageInformation page, string post_id)
+      {
+         var _fbRestClient = new RestClient($"https://graph.facebook.com/{post_id}?fields=permalink&access_token={page.AccessToken}");
+
+         var request = new RestRequest(Method.GET);
+
+         try
+         {
+            var response = _fbRestClient.Execute(request);
+            if (!response.IsSuccessful)
+            {
+               return FacebookGraphResult<InstagramPost>.Fail(response.Content);
+            }
+
+            return FacebookGraphResult<InstagramPost>.Success(JsonConvert.DeserializeObject<InstagramPost>(response.Content));
          }
          catch (Exception ex)
          {
