@@ -288,7 +288,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
             }
             else
             {
-               return FacebookGraphResult<FacebookPost>.Fail($"All photos failed to upload, {last_error}");
+               return FacebookGraphResult<FacebookPost>.Fail("{\"error\":{\"message\":\"All media files failed to upload.\"}}");
             }
          }
       }
@@ -341,7 +341,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
 
             if (!uploadResult.IsSuccessful)
             {
-               return FacebookGraphResult<FacebookPost>.Fail("An error has occured while trying to upload video to Facebook. Details: " + uploadResult.Message);
+               return FacebookGraphResult<FacebookPost>.Fail(uploadResult.Message);
             }
             else
             {
@@ -480,7 +480,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
          var uploadResult = UploadVideo(page, content, video, unixTimeStamp);
 
          if (!uploadResult.IsSuccessful)
-            return FacebookGraphResult<FacebookPost>.Fail("An error has occured while trying to upload video to facebook via Graph API. Details: " + uploadResult.Message);
+            return FacebookGraphResult<FacebookPost>.Fail(uploadResult.Message);
 
 
          var _fbRestClient = new RestClient($"https://graph.facebook.com/{page.Id}/videos")
