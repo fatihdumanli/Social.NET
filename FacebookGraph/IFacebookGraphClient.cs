@@ -140,7 +140,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
       /// <param name="assetURL"></param>
       /// <param name="caption"></param>
       /// <returns></returns>
-      FacebookGraphResult<InstagramPost> PublishInstagramPost(FacebookPageInformation page, InstagramContainerType mediaType, string assetURL, string caption);
+      FacebookGraphResult<InstagramPost> PublishInstagramPost(FacebookPageInformation page, InstagramMediaType mediaType, string assetURL, string caption);
       #endregion
 
    }
