@@ -19,6 +19,8 @@ namespace SocialMediaSharing.BLL.FacebookGraph.Entities
       public string PhotoURL { get; set; }
       [JsonProperty("alt_text")]
       public string AltText { get; set; }
+      [JsonProperty("alt_text_custom")]
+      public string AltTextCustom { get; set; }
       [JsonProperty("created_time")]
       public DateTime CreatedTime { get; set; }
 

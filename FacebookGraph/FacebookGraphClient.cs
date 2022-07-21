@@ -199,7 +199,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
         /// <returns></returns>
         public FacebookGraphResult<FacebookPost> PublishPost(FacebookPageInformation page, string content, FacebookPhoto photo)
         {
-            var _fbRestClient = new RestClient($"https://graph.facebook.com/{page.Id}/photos?url={photo.PhotoURL}&published={photo.IsPublished}&message={content}&access_token={page.AccessToken}");
+            var _fbRestClient = new RestClient($"https://graph.facebook.com/{page.Id}/photos?url={photo.PhotoURL}&published={photo.IsPublished}&message={content}&alt_text_custom={photo.AltTextCustom}&access_token={page.AccessToken}");
 
             var request = new RestRequest(Method.POST);
 
@@ -237,7 +237,7 @@ namespace SocialMediaSharing.BLL.FacebookGraph
 
                 foreach (var photo in photos)
                 {
-                    var _fbRestClient = new RestClient($"https://graph.facebook.com/{page.Id}/photos?published=false&url={photo.PhotoURL}&access_token={page.AccessToken}");
+                    var _fbRestClient = new RestClient($"https://graph.facebook.com/{page.Id}/photos?published=false&url={photo.PhotoURL}&alt_text_custom={photo.AltTextCustom}&access_token={page.AccessToken}");
                     var request = new RestRequest(Method.POST);
 
                     try
