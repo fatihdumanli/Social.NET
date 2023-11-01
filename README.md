@@ -8,4 +8,3 @@ A .NET Framework library for automated posting to platforms Facebook, Twitter an
  - Supports publishing post with media objects like image/video.
  - Can be integrated any logger with IAPILibLogger interface.
  
- I will add up a documentation soon.

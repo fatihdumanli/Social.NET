@@ -18,20 +18,23 @@ namespace SocialMediaSharing.BLL.TwitterAPI
 {
     public class TwitterAPIClient : ITwitterAPIClient
     {
-        readonly IAPILibLogger _logger;
+        private readonly IAPILibLogger _logger;
+        private readonly string ConsumerKey = string.Empty;
+        private readonly string ConsumerSecret = string.Empty;
 
-        public TwitterAPIClient()
+
+        public TwitterAPIClient(string consumerKey, string consumerSecret)
         {
-
+            ConsumerKey = consumerKey;
+            ConsumerSecret = consumerSecret;
         }
 
-        public TwitterAPIClient(IAPILibLogger logger)
+        public TwitterAPIClient(string consumerKey, string consumerSecret, IAPILibLogger logger)
         {
+            ConsumerKey = consumerKey;
+            ConsumerSecret = consumerSecret;
             _logger = logger;
         }
-        readonly string ConsumerKey = ConfigurationManager.AppSettings["TwitterConsumerKey"];
-        readonly string ConsumerSecret = ConfigurationManager.AppSettings["TwitterConsumerSecret"];
-
         #region Identification
 
         /// <summary>
@@ -69,6 +72,70 @@ namespace SocialMediaSharing.BLL.TwitterAPI
 
         }
 
+        #endregion
+        
+        #region Get tweets
+        public TwitterAPIResult<List<Tweet>> GetTweets(OAuthv1AccessToken token, string from)
+        {
+            var _twitterRestClient = new RestClient($"https://api.twitter.com/1.1/search/tweets.json")
+            {
+                Authenticator = OAuth1Authenticator
+                  .ForProtectedResource(ConsumerKey, ConsumerSecret, token.OAuthToken, token.OAuthSecret)
+            };
+
+            var request = new RestRequest(Method.GET);
+            request.AddParameter("q", $"@{from}");
+            
+            try 
+            {
+                var response = _twitterRestClient.Execute(request);
+
+                if (!response.IsSuccessful)
+                {
+                    return TwitterAPIResult<List<Tweet>>.Fail(response.Content);
+                }
+                
+                var tweets = JsonConvert.DeserializeObject<List<Tweet>>(response.Content);
+                
+                return TwitterAPIResult<List<Tweet>>.Success(tweets);
+            }
+            catch(Exception ex)
+            {
+                return TwitterAPIResult<List<Entities.Tweet>>.Fail(ex.Message);
+            }
+
+        }
+        #endregion
+
+
+        #region Delete Tweet 
+        public TwitterAPIResult<Tweet> DeleteTweet(OAuthv1AccessToken token, string id)
+        {
+            var _twitterRestClient = new RestClient($"https://api.twitter.com/2/tweets/{id}")
+            {
+                Authenticator = OAuth1Authenticator
+                  .ForProtectedResource(ConsumerKey, ConsumerSecret, token.OAuthToken, token.OAuthSecret)
+            };
+
+            var request = new RestRequest(Method.DELETE);
+            
+            try 
+            {
+                var response = _twitterRestClient.Execute(request);
+
+                if (!response.IsSuccessful)
+                {
+                    return TwitterAPIResult<Tweet>.Fail(response.Content);
+                }
+                
+                return TwitterAPIResult<Tweet>.Success(null);
+            }
+            catch(Exception ex)
+            {
+                return TwitterAPIResult<Entities.Tweet>.Fail(ex.Message);
+            }
+
+        }
         #endregion
 
         #region Post status update (tweet)
@@ -241,6 +308,7 @@ namespace SocialMediaSharing.BLL.TwitterAPI
 
         }
         #endregion
+        
 
         #region Media
         public TwitterAPIResult<TwitterMedia> UploadImage(OAuthv1AccessToken token, byte[] file)
@@ -469,8 +537,6 @@ namespace SocialMediaSharing.BLL.TwitterAPI
 
             return TwitterAPIResult<LaunchVideoUploadResponse>.Success(LaunchVideoUploadResponse.Create(media_id));
         }
-
-
         #endregion
 
     }
